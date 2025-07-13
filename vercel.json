@@ -1,3 +1,7 @@
 {
+  "buildCommand": "cd superclaude-generator && npm run build",
+  "outputDirectory": "superclaude-generator/.next",
+  "installCommand": "cd superclaude-generator && npm install",
+  "devCommand": "cd superclaude-generator && npm run dev",
   "framework": "nextjs"
 } 
