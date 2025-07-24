@@ -6,12 +6,16 @@ import CommandSelector from '@/components/CommandSelector';
 import FlagSelector from '@/components/FlagSelector';
 import PersonaSelector from '@/components/PersonaSelector';
 import CommandGenerator from '@/components/CommandGenerator';
+import PresetTemplates from '@/components/PresetTemplates';
+import HelpModal from '@/components/HelpModal';
+import WelcomeBanner from '@/components/WelcomeBanner';
 
 export default function Home() {
   const [selectedCommand, setSelectedCommand] = useState<Command | null>(null);
   const [selectedFlags, setSelectedFlags] = useState<string[]>([]);
   const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
   const [customArguments, setCustomArguments] = useState<string>('');
+  const [showHelp, setShowHelp] = useState(false);
 
   const handleFlagToggle = (flag: string) => {
     setSelectedFlags(prev => 
@@ -28,6 +32,13 @@ export default function Home() {
     setCustomArguments('');
   };
 
+  const handleApplyTemplate = (command: Command, flags: string[], persona: Persona | null) => {
+    setSelectedCommand(command);
+    setSelectedFlags(flags);
+    setSelectedPersona(persona);
+    setCustomArguments('');
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -40,12 +51,23 @@ export default function Home() {
                 v2.0.1
               </span>
             </div>
-            <button
-              onClick={handleReset}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
-            >
-              重置
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowHelp(true)}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                帮助
+              </button>
+              <button
+                onClick={handleReset}
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+              >
+                重置
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -60,6 +82,12 @@ export default function Home() {
             选择命令、配置标志、选择认知角色，生成专业的 SuperClaude 命令。
           </p>
         </div>
+
+        {/* Welcome Banner */}
+        <WelcomeBanner />
+
+        {/* Preset Templates */}
+        <PresetTemplates onApplyTemplate={handleApplyTemplate} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column - Selectors */}
@@ -107,6 +135,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Help Modal */}
+      <HelpModal isOpen={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   );
 }

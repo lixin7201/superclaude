@@ -3,6 +3,8 @@
 import React from 'react';
 import { Command } from '@/types';
 import { universalFlags } from '@/data/commands';
+import { flagExplanations } from '@/data/detailedDescriptions';
+import HelpTooltip from './HelpTooltip';
 
 interface FlagSelectorProps {
   selectedCommand: Command | null;
@@ -48,9 +50,16 @@ const FlagSelector: React.FC<FlagSelectorProps> = ({ selectedCommand, selectedFl
                       className="mr-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <div className="flex-1">
-                      <div className="font-medium text-gray-800">
+                      <div className="font-medium text-gray-800 flex items-center">
                         {flag.flag}
                         {flag.alias && <span className="text-sm text-gray-500 ml-2">({flag.alias})</span>}
+                        {flagExplanations[flag.flag as keyof typeof flagExplanations] && (
+                          <HelpTooltip
+                            content={flagExplanations[flag.flag as keyof typeof flagExplanations].whenToUse}
+                            example={flagExplanations[flag.flag as keyof typeof flagExplanations].example}
+                            tip={flagExplanations[flag.flag as keyof typeof flagExplanations].beginnerTip}
+                          />
+                        )}
                       </div>
                       <div className="text-sm text-gray-600">{flag.description}</div>
                     </div>

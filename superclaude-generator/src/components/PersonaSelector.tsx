@@ -3,6 +3,8 @@
 import React from 'react';
 import { Persona } from '@/types';
 import { personas } from '@/data/commands';
+import { personaGuide } from '@/data/detailedDescriptions';
+import HelpTooltip from './HelpTooltip';
 
 interface PersonaSelectorProps {
   selectedPersona: Persona | null;
@@ -42,7 +44,16 @@ const PersonaSelector: React.FC<PersonaSelectorProps> = ({ selectedPersona, onPe
                 : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
             }`}
           >
-            <div className="font-semibold text-gray-800 mb-2">{persona.name}</div>
+            <div className="font-semibold text-gray-800 mb-2 flex items-center">
+              {persona.name}
+              {personaGuide[persona.id as keyof typeof personaGuide] && (
+                <HelpTooltip
+                  content={personaGuide[persona.id as keyof typeof personaGuide].bestFor}
+                  example={personaGuide[persona.id as keyof typeof personaGuide].example}
+                  tip={personaGuide[persona.id as keyof typeof personaGuide].tip}
+                />
+              )}
+            </div>
             <div className="text-sm text-gray-600 mb-2">{persona.description}</div>
             <div className="text-xs text-gray-500 mb-2">
               <strong>专业领域:</strong> {persona.expertise}

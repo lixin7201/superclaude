@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Command, Persona } from '@/types';
+import HelpTooltip from './HelpTooltip';
 
 interface CommandGeneratorProps {
   selectedCommand: Command | null;
@@ -75,8 +76,13 @@ const CommandGenerator: React.FC<CommandGeneratorProps> = ({
       
       {/* Custom Arguments Input */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
           自定义参数 (可选)
+          <HelpTooltip 
+            content="可以添加任务描述、文件路径或其他特定参数"
+            example='"实现用户登录功能" 或 --file src/auth.js'
+            tip="描述越详细，AI理解越准确"
+          />
         </label>
         <input
           type="text"
@@ -92,8 +98,12 @@ const CommandGenerator: React.FC<CommandGeneratorProps> = ({
       
       {/* Generated Command Display */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
           生成的命令
+          <HelpTooltip 
+            content="这是最终生成的命令，可以直接复制到 Claude Code 中使用"
+            tip="点击下方的复制按钮，然后粘贴到 Claude Code 对话框"
+          />
         </label>
         <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
           {generatedCommand || '请选择一个命令开始...'}
@@ -133,6 +143,24 @@ const CommandGenerator: React.FC<CommandGeneratorProps> = ({
                 </ul>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Usage Tips */}
+      {generatedCommand && (
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-start">
+            <span className="text-blue-600 mr-2">💡</span>
+            <div className="text-sm text-gray-700">
+              <strong>使用提示：</strong>
+              <ol className="mt-2 space-y-1 ml-4 list-decimal">
+                <li>复制生成的命令</li>
+                <li>打开 Claude Code 对话</li>
+                <li>粘贴命令并按回车执行</li>
+                <li>AI 会根据你选择的配置执行相应任务</li>
+              </ol>
+            </div>
           </div>
         </div>
       )}

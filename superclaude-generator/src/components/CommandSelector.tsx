@@ -3,6 +3,8 @@
 import React from 'react';
 import { Command } from '@/types';
 import { commands } from '@/data/commands';
+import { commandScenarios } from '@/data/detailedDescriptions';
+import HelpTooltip from './HelpTooltip';
 
 interface CommandSelectorProps {
   selectedCommand: Command | null;
@@ -36,7 +38,15 @@ const CommandSelector: React.FC<CommandSelectorProps> = ({ selectedCommand, onCo
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="font-semibold text-gray-800 mb-2">{command.name}</div>
+                  <div className="font-semibold text-gray-800 mb-2 flex items-center">
+                    {command.name}
+                    {commandScenarios[command.id as keyof typeof commandScenarios] && (
+                      <HelpTooltip 
+                        content={commandScenarios[command.id as keyof typeof commandScenarios].tips}
+                        example={commandScenarios[command.id as keyof typeof commandScenarios].scenarios[0].example}
+                      />
+                    )}
+                  </div>
                   <div className="text-sm text-gray-600 mb-2">{command.description}</div>
                   <div className="text-xs text-gray-500">
                     {command.flags.slice(0, 3).join(', ')}
