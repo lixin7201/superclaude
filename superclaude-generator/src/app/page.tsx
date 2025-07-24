@@ -9,6 +9,7 @@ import CommandGenerator from '@/components/CommandGenerator';
 import PresetTemplates from '@/components/PresetTemplates';
 import HelpModal from '@/components/HelpModal';
 import WelcomeBanner from '@/components/WelcomeBanner';
+import AICommandGenerator from '@/components/AICommandGenerator';
 
 export default function Home() {
   const [selectedCommand, setSelectedCommand] = useState<Command | null>(null);
@@ -85,6 +86,9 @@ export default function Home() {
 
         {/* Welcome Banner */}
         <WelcomeBanner />
+
+        {/* AI Command Generator */}
+        <AICommandGenerator onCommandGenerated={handleApplyTemplate} />
 
         {/* Preset Templates */}
         <PresetTemplates onApplyTemplate={handleApplyTemplate} />
