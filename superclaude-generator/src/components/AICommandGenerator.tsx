@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { openRouterService } from '@/services/openrouter-final';
+import { apicoreService } from '@/services/apicore';
 import { Command, Persona } from '@/types';
 import { commands, personas } from '@/data/commands';
 
@@ -36,7 +36,7 @@ const AICommandGenerator: React.FC<AICommandGeneratorProps> = ({ onCommandGenera
     setGeneratedCommand(null);
 
     try {
-      const commandString = await openRouterService.generateCommand(userInput);
+      const commandString = await apicoreService.generateCommand(userInput);
       setGeneratedCommand(commandString);
       
       // Parse the generated command
@@ -134,7 +134,7 @@ const AICommandGenerator: React.FC<AICommandGeneratorProps> = ({ onCommandGenera
             <span className="text-2xl">🤖</span>
             AI 智能命令生成
             <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
-              Powered by Gemini
+              Powered by Gemini 2.5 Pro
             </span>
           </h2>
           <p className="text-sm text-gray-600 mt-1">

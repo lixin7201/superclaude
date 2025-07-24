@@ -10,7 +10,6 @@ import PresetTemplates from '@/components/PresetTemplates';
 import HelpModal from '@/components/HelpModal';
 import WelcomeBanner from '@/components/WelcomeBanner';
 import AICommandGenerator from '@/components/AICommandGenerator';
-import TestAPIButton from '@/components/TestAPIButton';
 
 export default function Home() {
   const [selectedCommand, setSelectedCommand] = useState<Command | null>(null);
@@ -143,9 +142,6 @@ export default function Home() {
 
       {/* Help Modal */}
       <HelpModal isOpen={showHelp} onClose={() => setShowHelp(false)} />
-      
-      {/* Test API Button - 仅开发环境 */}
-      {process.env.NODE_ENV === 'development' && <TestAPIButton />}
     </div>
   );
 }
