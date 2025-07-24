@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { openRouterService } from '@/services/openrouter';
+import { openRouterService } from '@/services/openrouter-new';
 import { Command, Persona } from '@/types';
 import { commands, personas } from '@/data/commands';
 
