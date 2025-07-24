@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Command, Persona } from '@/types';
 import HelpTooltip from './HelpTooltip';
+import { exampleExplanations, flagChineseExplanations } from '@/data/exampleExplanations';
 
 interface CommandGeneratorProps {
   selectedCommand: Command | null;
@@ -105,8 +106,24 @@ const CommandGenerator: React.FC<CommandGeneratorProps> = ({
             tip="点击下方的复制按钮，然后粘贴到 Claude Code 对话框"
           />
         </label>
-        <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
-          {generatedCommand || '请选择一个命令开始...'}
+        <div className="bg-gray-900 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+          {generatedCommand ? (
+            <div className="flex flex-wrap items-center gap-2">
+              {generatedCommand.split(' ').map((part, index) => {
+                if (part.startsWith('/')) {
+                  return <span key={index} className="text-yellow-400">{part}</span>;
+                } else if (part.startsWith('--')) {
+                  return <span key={index} className="text-blue-400">{part}</span>;
+                } else if (part.startsWith('"') || part.endsWith('"')) {
+                  return <span key={index} className="text-green-400">{part}</span>;
+                } else {
+                  return <span key={index} className="text-gray-300">{part}</span>;
+                }
+              })}
+            </div>
+          ) : (
+            <span className="text-gray-500">请选择一个命令开始...</span>
+          )}
         </div>
       </div>
       
@@ -123,12 +140,50 @@ const CommandGenerator: React.FC<CommandGeneratorProps> = ({
             </div>
             {selectedPersona && (
               <div className="mb-3">
-                <strong className="text-gray-800">选择的角色:</strong> {selectedPersona.name} ({selectedPersona.flag})
+                <strong className="text-gray-800">选择的角色:</strong> 
+                <span className="text-gray-700">{selectedPersona.name}</span>
+                <span className="text-gray-500 text-sm ml-2">({selectedPersona.flag})</span>
+                <div className="text-sm text-gray-600 mt-1">
+                  🎯 {selectedPersona.expertise}
+                </div>
               </div>
             )}
             {selectedFlags.length > 0 && (
               <div className="mb-3">
-                <strong className="text-gray-800">选择的标志:</strong> {selectedFlags.join(', ')}
+                <strong className="text-gray-800">选择的标志:</strong>
+                <div className="mt-1 space-y-1">
+                  {selectedFlags.map((flag, index) => (
+                    <div key={index} className="text-sm">
+                      <span className="font-mono text-gray-700">{flag}</span>
+                      {flagChineseExplanations[flag] && (
+                        <span className="text-gray-500 ml-2">- {flagChineseExplanations[flag]}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {customArguments && (
+              <div className="mb-3">
+                <strong className="text-gray-800">自定义参数:</strong>
+                <div className="text-sm mt-1">
+                  <span className="font-mono text-gray-700">{customArguments}</span>
+                  {customArguments.includes('--env') && (
+                    <div className="text-xs text-gray-600 mt-1">
+                      💡 指定部署环境（staging=测试环境，prod=生产环境）
+                    </div>
+                  )}
+                  {customArguments.includes('--depth') && (
+                    <div className="text-xs text-gray-600 mt-1">
+                      💡 指定解释深度（beginner=初学者，expert=专家）
+                    </div>
+                  )}
+                  {customArguments.includes('--file') && (
+                    <div className="text-xs text-gray-600 mt-1">
+                      💡 指定要处理的文件路径
+                    </div>
+                  )}
+                </div>
               </div>
             )}
             {selectedCommand.examples.length > 0 && (
@@ -136,8 +191,15 @@ const CommandGenerator: React.FC<CommandGeneratorProps> = ({
                 <strong className="text-gray-800">示例用法:</strong>
                 <ul className="mt-2 ml-4 text-sm text-gray-600">
                   {selectedCommand.examples.map((example, index) => (
-                    <li key={index} className="font-mono bg-gray-100 p-2 rounded mb-1">
-                      {example}
+                    <li key={index} className="mb-2">
+                      <div className="font-mono bg-gray-100 p-2 rounded">
+                        {example}
+                      </div>
+                      {exampleExplanations[example] && (
+                        <div className="text-xs text-gray-600 mt-1 ml-2">
+                          💡 {exampleExplanations[example]}
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
