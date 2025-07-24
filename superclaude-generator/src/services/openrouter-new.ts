@@ -6,7 +6,7 @@ export interface ChatMessage {
 }
 
 class OpenRouterService {
-  private apiKey: string = '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';
+  private apiKey: string = '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';
   private baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
   
   async generateCommand(userInput: string): Promise<string> {
