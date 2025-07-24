@@ -36,6 +36,8 @@ class OpenRouterService {
       throw new Error('API key not configured');
     }
     
+    console.log('Using API Key:', this.apiKey.substring(0, 20) + '...');
+    
     const messages: ChatMessage[] = [
       {
         role: 'system',
@@ -53,23 +55,27 @@ class OpenRouterService {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.apiKey}`,
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'SuperClaude Command Generator'
+          'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://superclaude-generator.vercel.app',
+          'X-Title': 'SuperClaude Command Generator',
+          'User-Agent': 'SuperClaude/1.0'
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-exp:free',  // Using the free Gemini 2.0 Flash model
+          model: 'google/gemini-2.0-flash-thinking-exp-1219:free',  // 使用免费的 Gemini 2.0 Flash Thinking 模型
           messages,
-          temperature: 0.3,  // Lower temperature for more consistent outputs
-          max_tokens: 500,
-          top_p: 0.9,
-          frequency_penalty: 0,
-          presence_penalty: 0
+          temperature: 0.3,
+          max_tokens: 500
         })
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || `API request failed: ${response.status}`);
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        try {
+          const errorData = JSON.parse(errorText);
+          throw new Error(errorData.error?.message || errorData.message || `API request failed: ${response.status}`);
+        } catch (e) {
+          throw new Error(`API request failed: ${response.status} - ${errorText}`);
+        }
       }
       
       const data: OpenRouterResponse = await response.json();
