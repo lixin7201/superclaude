@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { openRouterService } from '@/services/openrouter';
 import { Command, Persona } from '@/types';
 import { commands, personas } from '@/data/commands';
-import EnvDebug from './EnvDebug';
 
 interface AICommandGeneratorProps {
   onCommandGenerated: (command: Command, flags: string[], persona: Persona | null, customArgs?: string) => void;
@@ -129,8 +128,6 @@ const AICommandGenerator: React.FC<AICommandGeneratorProps> = ({ onCommandGenera
 
   return (
     <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg shadow-md p-6 mb-6">
-      {/* 临时调试信息 */}
-      {process.env.NODE_ENV === 'development' && <EnvDebug />}
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">

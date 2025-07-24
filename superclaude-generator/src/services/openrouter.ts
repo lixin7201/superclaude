@@ -27,10 +27,8 @@ class OpenRouterService {
   private baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
   
   constructor() {
-    this.apiKey = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || '';
-    if (!this.apiKey) {
-      console.warn('OpenRouter API key not found in environment variables');
-    }
+    // 直接内置 API key（仅供个人使用）
+    this.apiKey = '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';
   }
   
   async generateCommand(userInput: string): Promise<string> {
