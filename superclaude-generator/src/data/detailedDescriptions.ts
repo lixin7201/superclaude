@@ -233,7 +233,8 @@ export const presetTemplates = [
     name: "🚀 安全部署上线",
     description: "把网站部署到服务器",
     command: "/deploy",
-    flags: ["--env staging", "--validate", "--plan", "--dry-run"],
+    flags: ["--validate", "--plan", "--dry-run"],
+    customArgs: "--env staging",
     explanation: "先部署测试环境 + 验证 + 显示计划 + 预览"
   },
   {
@@ -241,7 +242,8 @@ export const presetTemplates = [
     name: "📚 学习理解代码",
     description: "看不懂代码想要解释",
     command: "/explain",
-    flags: ["--depth beginner", "--visual", "--examples", "--persona-mentor"],
+    flags: ["--visual", "--examples", "--persona-mentor"],
+    customArgs: "--depth beginner",
     explanation: "初学者深度 + 可视化 + 示例 + 导师模式"
   },
   {

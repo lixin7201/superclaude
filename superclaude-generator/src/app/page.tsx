@@ -32,11 +32,11 @@ export default function Home() {
     setCustomArguments('');
   };
 
-  const handleApplyTemplate = (command: Command, flags: string[], persona: Persona | null) => {
+  const handleApplyTemplate = (command: Command, flags: string[], persona: Persona | null, customArgs?: string) => {
     setSelectedCommand(command);
     setSelectedFlags(flags);
     setSelectedPersona(persona);
-    setCustomArguments('');
+    setCustomArguments(customArgs || '');
   };
 
   return (

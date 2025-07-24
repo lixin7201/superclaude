@@ -71,7 +71,7 @@ const CommandGenerator: React.FC<CommandGeneratorProps> = ({
   const generatedCommand = generateCommand();
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div id="command-generator" className="bg-white rounded-lg shadow-md p-6">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">生成的命令</h2>
       
       {/* Custom Arguments Input */}

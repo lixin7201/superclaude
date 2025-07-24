@@ -1,19 +1,26 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { presetTemplates } from '@/data/detailedDescriptions';
 import { Command, Persona } from '@/types';
 import { commands, personas } from '@/data/commands';
 
 interface PresetTemplatesProps {
-  onApplyTemplate: (command: Command, flags: string[], persona: Persona | null) => void;
+  onApplyTemplate: (command: Command, flags: string[], persona: Persona | null, customArgs?: string) => void;
 }
 
 const PresetTemplates: React.FC<PresetTemplatesProps> = ({ onApplyTemplate }) => {
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const handleTemplateClick = (template: typeof presetTemplates[0]) => {
+    // 设置选中状态
+    setSelectedTemplateId(template.id);
+    
     // 查找对应的命令
     const command = commands.find(cmd => cmd.name === template.command);
-    if (!command) return;
+    if (!command) {
+      console.error('Command not found:', template.command);
+      return;
+    }
 
     // 处理persona标志
     let selectedPersona: Persona | null = null;
@@ -26,7 +33,18 @@ const PresetTemplates: React.FC<PresetTemplatesProps> = ({ onApplyTemplate }) =>
     // 过滤出非persona的标志
     const regularFlags = template.flags.filter(flag => !flag.startsWith('--persona-'));
 
-    onApplyTemplate(command, regularFlags, selectedPersona);
+    // 如果模板有自定义参数，也传递过去
+    const customArgs = (template as any).customArgs || '';
+    
+    onApplyTemplate(command, regularFlags, selectedPersona, customArgs);
+    
+    // 滚动到命令生成器部分
+    setTimeout(() => {
+      const generator = document.querySelector('#command-generator');
+      if (generator) {
+        generator.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   return (
@@ -42,11 +60,15 @@ const PresetTemplates: React.FC<PresetTemplatesProps> = ({ onApplyTemplate }) =>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {presetTemplates.map(template => (
-          <button
-            key={template.id}
-            onClick={() => handleTemplateClick(template)}
-            className="text-left p-4 rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 group"
-          >
+          <div key={template.id} className="relative">
+            <button
+              onClick={() => handleTemplateClick(template)}
+              className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 group ${
+                selectedTemplateId === template.id 
+                  ? 'border-blue-500 bg-blue-50 shadow-md' 
+                  : 'border-gray-200 hover:border-blue-400 hover:bg-blue-50'
+              }`}
+            >
             <div className="flex items-start">
               <div className="text-2xl mr-3 group-hover:scale-110 transition-transform">
                 {template.name.split(' ')[0]}
@@ -63,7 +85,13 @@ const PresetTemplates: React.FC<PresetTemplatesProps> = ({ onApplyTemplate }) =>
                 </div>
               </div>
             </div>
-          </button>
+            </button>
+            {selectedTemplateId === template.id && (
+              <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow-md">
+                ✓ 已选择
+              </div>
+            )}
+          </div>
         ))}
       </div>
 
