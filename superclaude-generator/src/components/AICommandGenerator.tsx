@@ -51,17 +51,21 @@ const AICommandGenerator: React.FC<AICommandGeneratorProps> = ({ onCommandGenera
   };
 
   const parseAndApplyCommand = (commandString: string) => {
-    // Clean up the command string
-    commandString = commandString.trim();
+    // Clean up the command string - remove any extra whitespace
+    commandString = commandString.trim().replace(/\s+/g, ' ');
     
-    // Extract command name
-    const commandMatch = commandString.match(/^\/\w+/);
+    console.log('Parsing command:', commandString);
+    
+    // Extract command name - be more flexible with the pattern
+    const commandMatch = commandString.match(/^\/?(\w+)/);
     if (!commandMatch) {
       setError('命令格式不正确，应以 / 开头');
       return;
     }
     
-    const commandName = commandMatch[0];
+    // Ensure the command starts with /
+    const commandName = commandMatch[0].startsWith('/') ? commandMatch[0] : `/${commandMatch[1]}`;
+    
     const command = commands.find(cmd => cmd.name === commandName);
     if (!command) {
       setError(`未找到命令: ${commandName}`);
