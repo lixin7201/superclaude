@@ -60,7 +60,7 @@ class OpenRouterService {
           'User-Agent': 'SuperClaude/1.0'
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-thinking-exp-1219:free',  // 使用免费的 Gemini 2.0 Flash Thinking 模型
+          model: 'google/gemini-2.0-flash-exp:free',  // 使用免费的 Gemini 2.0 Flash 模型
           messages,
           temperature: 0.3,
           max_tokens: 500

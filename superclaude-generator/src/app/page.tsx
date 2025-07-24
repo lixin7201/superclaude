@@ -10,6 +10,7 @@ import PresetTemplates from '@/components/PresetTemplates';
 import HelpModal from '@/components/HelpModal';
 import WelcomeBanner from '@/components/WelcomeBanner';
 import AICommandGenerator from '@/components/AICommandGenerator';
+import APIDebug from '@/components/APIDebug';
 
 export default function Home() {
   const [selectedCommand, setSelectedCommand] = useState<Command | null>(null);
@@ -142,6 +143,9 @@ export default function Home() {
 
       {/* Help Modal */}
       <HelpModal isOpen={showHelp} onClose={() => setShowHelp(false)} />
+      
+      {/* API Debug (only in development) */}
+      {process.env.NODE_ENV === 'development' && <APIDebug />}
     </div>
   );
 }
